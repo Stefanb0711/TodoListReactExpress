@@ -213,24 +213,24 @@ function Home(props){
 
                     </div>
                           {clickedOnTodoGroup ?
-                          <div class="col">
+                              <div class="col">
+                                  <ul className="list-group">
 
-                        {todoListElements.map((todoListElement, index) => {
-                            return (
-                                <ListElement
-                                key={index}
-                                id={todoListElement["id"]}
-                                element = {todoListElement["content"]}
-                                delete={deleteTodoItem}
-                                />
-                                );
-                            })}
+                                      {todoListElements.map((todoListElement, index) => {
+                                          return (
+                                              <ListElement
+                                                  key={index}
+                                                  id={todoListElement["id"]}
+                                                  element={todoListElement["content"]}
+                                                  delete={deleteTodoItem}
+                                              />
+                                          );
+                                      })}
 
+                                  </ul>
+                                      <InputArea add={addTodoElement}/>
 
-                        <InputArea add={addTodoElement} />
-
-                        One of three columns
-                    </div> : <div style={{width: "300px"}}> Keine Todoliste ausgewählt </div>}
+                              </div> : <div style={{width: "300px"}}> Keine Todoliste ausgewählt </div>}
                       </div>
                 </div> :
                 <div style={{color: "red", justifyContent: "center", alignItems: "center", width : "300px"}}> Sie müssen sich erst anmelden</div>
