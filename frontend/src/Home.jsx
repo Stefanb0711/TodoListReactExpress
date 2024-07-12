@@ -11,7 +11,9 @@ function Home(props){
 
     //var [filteredItems, setFilteredItems] = useState(todoGroups);
 
+    const [todoListElements, setTodoListElements] = useState([])
 
+    const [clickedOnTodoGroup, setClickedOnTodoGroup] = useState(false);
 
     async function deleteTodoGroup(id){
 
@@ -75,18 +77,68 @@ function Home(props){
 
     }
 
+    async function deleteTodoItem(){
 
+    }
+
+    async function openTodoList(id){
+
+        setClickedOnTodoGroup(!clickedOnTodoGroup);
+
+        console.log("Id der Todogroup: ", id);
+
+        const response = await fetch("http://localhost:5000/get-todo-list", {
+            method : "POST",
+            headers: {
+                    "Content-Type": "application/json"
+                },
+            body: JSON.stringify({list_id: id})
+        })
+
+        if (!response.ok) {
+            console.log("Fehler beim zugreifen auf Todolistelements");
+            return;
+        }
+
+
+        const responseData = response.json();
+
+        setTodoListElements(responseData.todoListElements);
+
+        console.log("ResponseData Todolistelements: ", responseData.todoListElements);
+
+
+    }
+
+    async function addTodoElement(input){
+        const response = await fetch("http://localhost:5000/add-todo-element", {
+            method : "POST",
+            headers: {
+                    "Content-Type": "application/json"
+                },
+            body: JSON.stringify({todoELement: input})
+        })
+
+        if (!response.ok) {
+            console.log("Fehler beim zugreifen auf Todolistelements");
+            return;
+        }
+
+        const responseData = response.json();
+    }
 
 
     return (
-        <div style={{justifyContent: "center", alignItems: "center", width : "300px"}}>
+        <div class="container text-center" style={{ width : "600px"}}>
             {props.loggedIn ?
-                <div class="row m-auto">
+                <div /*class="row m-auto"*/>
+                      <div class="row align-items-start">
                     <div class="col">
                         <ul class="list-group">
 
                             {props.filteredItems.map((todoGroup, index) => {
                                 return (<ListElement
+                                        openTodoList = {openTodoList}
                                         key={index}
                                         id={todoGroup["id"]}
                                         element={todoGroup["list_name"]}
@@ -100,10 +152,26 @@ function Home(props){
 
 
                     </div>
-                    <div class="col">
-                        One of three columns
-                    </div>
+                          {clickedOnTodoGroup ?
+                          <div class="col">
 
+                        {todoListElements.map((todoListElement, index) => {
+                            return (
+                                <ListElement
+                                key={index}
+                                id={todoListElement["id"]}
+                                element = {todoListElement["content"]}
+                                delete={deleteTodoItem}
+                                />
+                                );
+                            })}
+
+
+                        <InputArea add={addTodoElement} />
+
+                        One of three columns
+                    </div> : <div style={{width: "300px"}}> Keine Todoliste ausgewählt </div>}
+                      </div>
                 </div> :
                 <div style={{color: "red", justifyContent: "center", alignItems: "center", width : "300px"}}> Sie müssen sich erst anmelden</div>
             }

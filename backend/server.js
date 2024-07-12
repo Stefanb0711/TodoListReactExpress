@@ -43,6 +43,8 @@ app.get("/", async (req, res) =>{
 });
 
 
+
+
 app.get("/login", async (req, res) => {
 
 
@@ -216,6 +218,50 @@ app.post("/get-todo-groups", async (req, res) =>{
 
 })
 
+
+
+app.post("/add-todo-element", async (req, res) => {
+
+    try {
+    const {todoElement} = req.body;
+
+    const resullt = await db.query("INSERT INTO listelements (content, list_id) VALUES ($1, $2)", []);
+
+    if (result.rows.length === 0) {
+      // Keine Zeile gefunden
+         return res.status(404).json({ message: 'Todoelelement not found' });
+    }
+
+    return res.status(200).json({message: 'Todoelement wurde erfolgreich hinzugefügt'});
+
+    } catch(err) {
+        console.error(err);
+        return res.status(500).json({message: 'Internal Server Error' })
+    }
+
+})
+
+
+app.post("get-todo-list", async(req, res) => {
+
+
+    try {
+
+        const result = await db.query("SELECT id, content FROM listelements WHERE list_id = $1", []);
+
+        if (result.rows.length === 0) {
+      // Keine Zeile gefunden
+         return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json({message: 'Todogroup wurde erfolgreich hinzugefügt', todoListElements: result.rows });
+
+    } catch(err){
+        console.error(err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+})
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

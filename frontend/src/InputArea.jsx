@@ -18,6 +18,8 @@ function InputArea(props){
         setInput("");
     }
 
+
+
     return (
 
         <div>
