@@ -227,10 +227,9 @@ app.post("/add-todo-element", async (req, res) => {
 
     const result = await db.query("INSERT INTO listelements (content, list_id) VALUES ($1, $2)", [todoElement, todoGroupId]);
 
-    if (result.rows.length === 0) {
-      // Keine Zeile gefunden
-         return res.status(404).json({ message: 'Todoelelement not found' });
-    }
+    if (result.rowCount === 0) {
+            return res.status(500).json({ message: 'Failed to add todo element' });
+        }
 
     //const resultTodoLists = await db.query("SELECT id, content FROM listelements WHERE list_id = $1", [todoGroupId]);
 
@@ -254,7 +253,7 @@ app.post("/get-todo-list", async(req, res) => {
 
         console.log("Current ListId: ", list_id);
 
-        const result = await db.query("SELECT id, content FROM listelements WHERE list_id = $1", [list_id]);
+        const result = await db.query("SELECT id, content FROM listelements WHERE list_id = $1", [parseInt(list_id)]);
 
         if (result.rows.length === 0) {
       // Keine Zeile gefunden

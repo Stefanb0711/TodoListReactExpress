@@ -16,6 +16,33 @@ function Home(props){
     const [clickedOnTodoGroup, setClickedOnTodoGroup] = useState(false);
     const [currentTodoGroupId, setCurrentTodoGroupId] = useState("");
 
+
+    async function getTodoList(){
+
+
+
+        const response = await fetch("http://localhost:5000/get-todo-list", {
+            method : "POST",
+            headers: {
+                    "Content-Type": "application/json"
+                },
+            body: JSON.stringify({list_id: currentTodoGroupId})
+        })
+
+        if (!response.ok) {
+            console.log("Fehler beim zugreifen auf Todolistelements");
+            return;
+        }
+
+
+        const responseData = await response.json();
+
+        setTodoListElements(responseData.todoListElements);
+
+        console.log("ResponseData Todolistelements: ", responseData.todoListElements);
+
+    }
+
     /*
     useEffect(()=>{
 
@@ -155,29 +182,8 @@ function Home(props){
 
         const responseData = await response.json();
 
-        console.log("ResponseDataTodoList: ", responseData.todoList);
+       await getTodoList();
 
-        setTodoListElements(responseData.todoList);
-
-        //Aktualisieren der Todoliste
-        /*
-        const responseGetTodoList = await fetch("http://localhost:5000/get-todo-list", {
-            method : "POST",
-            headers: {
-                    "Content-Type": "application/json"
-                },
-            body: JSON.stringify({list_id: currentTodoGroupId})
-        })
-
-        if (!responseGetTodoList.ok) {
-            console.log("Fehler beim zugreifen auf Todolistelements");
-            return;
-        }
-
-
-        const responseDataGetTodoList = await responseGetTodoList.json();
-
-        setTodoListElements(responseDataGetTodoList.todoListElements);*/
 
     }
 
