@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import Header from "./Header";
 import InputArea from "./InputArea";
 import ListElement from "./ListElement";
-
+import TodoListElement from "./TodoListElement.jsx";
 
 function Home(props){
 
@@ -132,9 +132,6 @@ function Home(props){
 
     }
 
-    async function deleteTodoItem(){
-
-    }
 
     async function openTodoList(id){
 
@@ -188,50 +185,71 @@ function Home(props){
     }
 
 
+    async function deleteTodoItem(id){
+        const response = await fetch("http://localhost:5000/delete-todo-item", {
+            method : "POST",
+            headers: {
+                    "Content-Type": "application/json"
+                },
+            body: JSON.stringify({ todoElementId: id})
+        })
+
+        if (!response.ok) {
+            console.log("Fehler beim hinzufügen des Todolistelements");
+            return;
+        }
+
+        await getTodoList();
+
+    }
+
+
     return (
         <div class="container text-center" style={{ width : "600px"}}>
             {props.loggedIn ?
                 <div /*class="row m-auto"*/>
-                      <div class="row align-items-start">
-                    <div class="col">
-                        <ul class="list-group">
+                    <div class="row align-items-start">
+                        <div class="col">
+                            <h1> Todolisten </h1>
 
-                            {props.filteredItems.map((todoGroup, index) => {
-                                return (<ListElement
-                                        openTodoList = {openTodoList}
-                                        key={index}
-                                        id={todoGroup["id"]}
-                                        element={todoGroup["list_name"]}
-                                        delete={deleteTodoGroup}
-                                    />
-                                );
-                            })}
+                            <ul class="list-group">
 
-                        </ul>
-                        <InputArea add={addTodoGroup}/>
+                                {props.filteredItems.map((todoGroup, index) => {
+                                    return (<ListElement
+                                            openTodoList={openTodoList}
+                                            key={index}
+                                            id={todoGroup["id"]}
+                                            element={todoGroup["list_name"]}
+                                            delete={deleteTodoGroup}
+                                        />
+                                    );
+                                })}
+
+                            </ul>
+                            <InputArea add={addTodoGroup}/>
 
 
+                        </div>
+                        {clickedOnTodoGroup ?
+                            <div class="col">
+                                <ul className="list-group">
+
+                                    {todoListElements.map((todoListElement, index) => {
+                                        return (
+                                            <TodoListElement
+                                                key={index}
+                                                id={todoListElement["id"]}
+                                                element={todoListElement["content"]}
+                                                delete={deleteTodoItem}
+                                            />
+                                        );
+                                    })}
+
+                                </ul>
+                                <InputArea add={addTodoElement}/>
+
+                            </div> : <div style={{width: "300px"}}> Keine Todoliste ausgewählt </div>}
                     </div>
-                          {clickedOnTodoGroup ?
-                              <div class="col">
-                                  <ul className="list-group">
-
-                                      {todoListElements.map((todoListElement, index) => {
-                                          return (
-                                              <ListElement
-                                                  key={index}
-                                                  id={todoListElement["id"]}
-                                                  element={todoListElement["content"]}
-                                                  delete={deleteTodoItem}
-                                              />
-                                          );
-                                      })}
-
-                                  </ul>
-                                      <InputArea add={addTodoElement}/>
-
-                              </div> : <div style={{width: "300px"}}> Keine Todoliste ausgewählt </div>}
-                      </div>
                 </div> :
                 <div style={{color: "red", justifyContent: "center", alignItems: "center", width : "300px"}}> Sie müssen sich erst anmelden</div>
             }

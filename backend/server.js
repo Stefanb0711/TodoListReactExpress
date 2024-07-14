@@ -269,6 +269,25 @@ app.post("/get-todo-list", async(req, res) => {
 
 })
 
+app.post("/delete-todo-item", async (req, res) => {
+
+    try {
+        const {todoElementId} = req.body;
+        
+        const result = await db.query("DELETE FROM listelements WHERE id=$1",[todoElementId] );
+        if (result.rowCount === 0) {
+                return res.status(404).json({ message: 'Todoelement not found' });
+            }
+
+            return res.status(200).json({ message: 'Todoelement deleted successfully' });
+
+    } catch(err){
+        console.log(err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+})
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
