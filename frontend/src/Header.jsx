@@ -54,7 +54,7 @@ function Header(props){
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input value={props.searchInput} onChange={handleChange} type="search" class="form-control" placeholder="Search..." aria-label="Search"/>
+          <input value={props.searchInput} onChange={handleChange} type="search" class="form-control" placeholder="Todoliste suchen..." aria-label="Search"/>
         </form>
 
         {props.loggedIn ?

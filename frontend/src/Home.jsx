@@ -210,7 +210,7 @@ function Home(props){
                 <div /*class="row m-auto"*/>
                     <div class="row align-items-start">
                         <div class="col">
-                            <h1> Todolisten </h1>
+                            <h1 style={{marginBottom : "20px", marginTop : "20px"}}> Todolisten </h1>
 
                             <ul class="list-group">
 
@@ -231,7 +231,7 @@ function Home(props){
 
                         </div>
                         {clickedOnTodoGroup ?
-                            <div class="col">
+                            <div class="col" style={{marginTop: "50px"}}>
                                 <ul className="list-group">
 
                                     {todoListElements.map((todoListElement, index) => {
