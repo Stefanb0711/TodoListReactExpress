@@ -3,6 +3,10 @@ import pg from "pg";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 import cors from "cors";
+import {configDotenv} from "dotenv";
+
+/*const apiKey = process.env.API_KEY;
+console.log("Api Key: ", apiKey);*/
 
 const app = express();
 const port = 5000;
@@ -11,7 +15,7 @@ const db = new pg.Client({
     user: "postgres",
     host: "localhost",
     database: "todo",
-    password: "bonez187",
+    password: "stAnWe",
     port: 5432,
 });
 db.connect();
